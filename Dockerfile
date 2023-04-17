@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:14
+FROM node:19-buster-slim
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # Expose the port the app will run on
-EXPOSE 3001
+EXPOSE 3000
 
 # Start the application
 CMD ["npm", "run", "dev"]

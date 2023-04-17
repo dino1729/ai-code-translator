@@ -5,6 +5,8 @@ import {
   ReconnectInterval,
 } from 'eventsource-parser';
 
+import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '@/utils/app/const';
+
 const createPrompt = (
   inputLanguage: string,
   outputLanguage: string,
@@ -82,14 +84,27 @@ export const OpenAIStream = async (
 
   const system = { role: 'system', content: prompt };
 
-  const res = await fetch(`https://api.openai.com/v1/chat/completions`, {
+  let url = `${OPENAI_API_HOST}/v1/chat/completions`;
+  if (OPENAI_API_TYPE === 'azure') {
+    url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
+  }
+
+  const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${key || process.env.OPENAI_API_KEY}`,
+      ...(OPENAI_API_TYPE === 'openai' && {
+        Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
+      }),
+      ...(OPENAI_API_TYPE === 'azure' && {
+        'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
+      }),
+      ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
+        'OpenAI-Organization': OPENAI_ORGANIZATION,
+      }),
     },
     method: 'POST',
     body: JSON.stringify({
-      model,
+      ...(OPENAI_API_TYPE === 'openai' && {model}),
       messages: [system],
       temperature: 0,
       stream: true,
