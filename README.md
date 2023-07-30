@@ -29,7 +29,7 @@ npm run dev
 **Docker compose build**
 
 ```bash
-docker-compose up --build -d aicodetranslator
+docker-compose up --build -d
 ```
 
 ## Contact

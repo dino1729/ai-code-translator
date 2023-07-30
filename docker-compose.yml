@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  ai-code-translator:
+  aicodetranslator:
     build: .
-    container_name: ai_code_translator
+    container_name: aicodetranslator
     ports:
       - '3002:3002'
     volumes:
