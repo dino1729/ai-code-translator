@@ -1,4 +1,4 @@
-import { APIKeyInput } from '@/components/APIKeyInput';
+//import { APIKeyInput } from '@/components/APIKeyInput';
 import { CodeBlock } from '@/components/CodeBlock';
 import { LanguageSelect } from '@/components/LanguageSelect';
 import { ModelSelect } from '@/components/ModelSelect';
@@ -8,22 +8,24 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [inputLanguage, setInputLanguage] = useState<string>('JavaScript');
+  const [inputLanguage, setInputLanguage] = useState<string>('TypeScript');
   const [outputLanguage, setOutputLanguage] = useState<string>('Python');
   const [inputCode, setInputCode] = useState<string>('');
   const [outputCode, setOutputCode] = useState<string>('');
-  const [model, setModel] = useState<OpenAIModel>('gpt-3.5-turbo');
+  const [model, setModel] = useState<OpenAIModel>('gpt-3p5-turbo-16k');
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>('');
+  //const [apiKey, setApiKey] = useState<string>('');
 
   const handleTranslate = async () => {
-    const maxCodeLength = model === 'gpt-3.5-turbo' ? 6000 : 12000;
+    //const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 6000 : 12000;
+    const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 12000 : 12000;
 
-    if (!apiKey) {
-      alert('Please enter an API key.');
-      return;
-    }
+    // if (!apiKey) {
+    //   alert('Please enter an API key.');
+    //   return;
+    // }
+    const apiKey = process.env.OPENAI_API_KEY || '';
 
     if (inputLanguage === outputLanguage) {
       alert('Please select different languages.');
@@ -107,11 +109,11 @@ export default function Home() {
     document.body.removeChild(el);
   };
 
-  const handleApiKeyChange = (value: string) => {
-    setApiKey(value);
+  // const handleApiKeyChange = (value: string) => {
+  //   setApiKey(value);
 
-    localStorage.setItem('apiKey', value);
-  };
+  //   localStorage.setItem('apiKey', value);
+  // };
 
   useEffect(() => {
     if (hasTranslated) {
@@ -119,13 +121,13 @@ export default function Home() {
     }
   }, [outputLanguage]);
 
-  useEffect(() => {
-    const apiKey = localStorage.getItem('apiKey');
+  // useEffect(() => {
+  //   const apiKey = localStorage.getItem('apiKey');
 
-    if (apiKey) {
-      setApiKey(apiKey);
-    }
-  }, []);
+  //   if (apiKey) {
+  //     setApiKey(apiKey);
+  //   }
+  // }, []);
 
   return (
     <>
@@ -143,9 +145,9 @@ export default function Home() {
           <div className="text-4xl font-bold">AI Code Translator</div>
         </div>
 
-        <div className="mt-6 text-center text-sm">
+        {/* <div className="mt-6 text-center text-sm">
           <APIKeyInput apiKey={apiKey} onChange={handleApiKeyChange} />
-        </div>
+        </div> */}
 
         <div className="mt-2 flex items-center space-x-2">
           <ModelSelect model={model} onChange={(value) => setModel(value)} />

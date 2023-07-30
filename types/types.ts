@@ -1,4 +1,4 @@
-export type OpenAIModel = 'gpt-3p5-turbo' | 'gpt-4';
+export type OpenAIModel = 'gpt-3p5-turbo-16k' | 'gpt-4';
 
 export interface TranslateBody {
   inputLanguage: string;
