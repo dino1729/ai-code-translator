@@ -5,7 +5,7 @@ services:
     build: .
     container_name: ai_code_translator
     ports:
-      - '3000:3000'
+      - '3002:3002'
     volumes:
       - .:/app
       - /app/node_modules
