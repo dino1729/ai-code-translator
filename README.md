@@ -9,7 +9,7 @@ Use AI to translate code from one language to another.
 **1. Clone Repo**
 
 ```bash
-git clone https://github.com/mckaywrigley/ai-code-translator.git
+git clone https://github.com/dino1729/ai-code-translator.git
 ```
 
 **2. Install Dependencies**
@@ -24,14 +24,15 @@ npm i
 npm run dev
 ```
 
-###Deploying to Docker
+## Deploying to Docker
 
-**Docker compose build**
+**Docker Build**
 
 ```bash
-docker-compose up --build -d
+docker build -t gptcodetranslator .
+docker run -p 3002:3002 --env-file .env.local --restart always --name aicodetranslator gptcodetranslator
 ```
 
 ## Contact
 
-If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/mckaywrigley).
+If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/dino1729).

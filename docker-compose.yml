@@ -1,18 +1,23 @@
 version: '3.8'
 
 services:
-  aicodetranslator:
+  gptcodetranslator:
     build: .
-    container_name: aicodetranslator
     ports:
-      - '3002:3002'
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - ./env.local:/app/.env.local
+      - 3002:3002
     environment:
-      - NODE_ENV=development
-    command: npm run dev
+      - OPENAI_API_KEY
+      - DEFAULT_MODEL
+      - NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT
+      - AZURE_DEPLOYMENT_ID
+      - OPENAI_API_VERSION
+      - OPENAI_API_TYPE
+      - OPENAI_API_HOST
+    env_file:
+      - .env.local
     restart: always
-    security_opt:
-      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
