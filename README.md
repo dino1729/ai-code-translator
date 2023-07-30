@@ -24,6 +24,14 @@ npm i
 npm run dev
 ```
 
+###Deploying to Docker
+
+**Docker compose build**
+
+```bash
+docker-compose up --build -d aicodetranslator
+```
+
 ## Contact
 
 If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/mckaywrigley).
