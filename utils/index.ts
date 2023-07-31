@@ -86,7 +86,8 @@ export const OpenAIStream = async (
 
   let url = `${OPENAI_API_HOST}/v1/chat/completions`;
   if (OPENAI_API_TYPE === 'azure') {
-    url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
+    //url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
+    url = `${OPENAI_API_HOST}/openai/deployments/${model}/chat/completions?api-version=${OPENAI_API_VERSION}`;
   }
 
   const res = await fetch(url, {
@@ -108,8 +109,36 @@ export const OpenAIStream = async (
       messages: [system],
       temperature: 0,
       stream: true,
+      stop: null,
     }),
   });
+
+  // const res = await fetch(url, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "api-key": `${key ? key : process.env.OPENAI_API_KEY}`,
+  //   },
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     "model": model,
+  //     "messages": [
+  //       {
+  //         "role": "system",
+  //         "content": "You are an expert programmer fluent in all programming languages that follows user instructions"
+  //       },
+  //       {
+  //         "role": "user",
+  //         "content": prompt,
+  //       },
+  //     ],
+  //     "temperature": 0,
+  //     "stream": true,
+  //     "stop": null,
+  //   })
+  // });
+
+  // const responseBody = await res.text();
+  // console.log(responseBody);
 
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
@@ -126,17 +155,30 @@ export const OpenAIStream = async (
 
   const stream = new ReadableStream({
     async start(controller) {
+      
+      let timeoutId: NodeJS.Timeout | undefined;
+      let isControllerClosed = false;
+
       const onParse = (event: ParsedEvent | ReconnectInterval) => {
         if (event.type === 'event') {
           const data = event.data;
+          //console.log(data);
 
-          if (data === '[DONE]') {
-            controller.close();
-            return;
-          }
-
+          // if (data === '[DONE]') {
+          //   controller.close();
+          //   return;
+          // }
+          
           try {
             const json = JSON.parse(data);
+            if (json.choices[0].finish_reason != null || data === '[DONE]') {
+              if (!isControllerClosed) { // Check if controller is not already closed
+                clearTimeout(timeoutId);
+                controller.close();
+                isControllerClosed = true; // Set the flag to true
+              }
+              return;
+            }
             const text = json.choices[0].delta.content;
             const queue = encoder.encode(text);
             controller.enqueue(queue);
@@ -151,7 +193,17 @@ export const OpenAIStream = async (
       for await (const chunk of res.body as any) {
         parser.feed(decoder.decode(chunk));
       }
-    },
+
+      // Set the timeout to close the controller after a specified duration (e.g., 10 seconds)
+      const timeoutDuration = 8000; // 8 seconds (adjust as needed)
+      timeoutId = setTimeout(() => {
+        // Only close the controller if it's not already closed
+        if (!isControllerClosed) {
+          controller.close();
+          isControllerClosed = true; // Set the flag to true
+        }
+      }, timeoutDuration);
+      },
   });
 
   return stream;

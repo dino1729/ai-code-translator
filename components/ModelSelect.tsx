@@ -13,12 +13,12 @@ export const ModelSelect: FC<Props> = ({ model, onChange }) => {
 
   return (
     <select
-      className="h-[40px] w-[140px] rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200"
+      className="h-[40px] w-[160px] rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200"
       value={model}
       onChange={handleChange}
     >
       <option value="gpt-3p5-turbo-16k">GPT-3.5-16K</option>
-      <option value="gpt-4">GPT-4</option>
+      <option value="gpt-3p5-turbo-old">GPT-3.5 OLD</option>
     </select>
   );
 };

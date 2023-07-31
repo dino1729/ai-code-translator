@@ -19,7 +19,7 @@ export default function Home() {
 
   const handleTranslate = async () => {
     //const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 6000 : 12000;
-    const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 12000 : 12000;
+    const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 24000 : 6000;
 
     // if (!apiKey) {
     //   alert('Please enter an API key.');
@@ -66,6 +66,12 @@ export default function Home() {
       body: JSON.stringify(body),
     });
 
+    // setTimeout(() => {
+    //   controller.abort();
+    //   setLoading(false);
+    //   setHasTranslated(true);
+    // }, 10000); // Abort after 10 seconds
+    
     if (!response.ok) {
       setLoading(false);
       alert('Something went wrong.');
@@ -150,7 +156,10 @@ export default function Home() {
         </div> */}
 
         <div className="mt-2 flex items-center space-x-2">
-          <ModelSelect model={model} onChange={(value) => setModel(value)} />
+          <ModelSelect
+            model={model}
+            onChange={(value) => setModel(value)}
+          />
 
           <button
             className="w-[140px] cursor-pointer rounded-md bg-violet-500 px-4 py-2 font-bold hover:bg-violet-600 active:bg-violet-700"
