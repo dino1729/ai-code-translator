@@ -195,7 +195,7 @@ export const OpenAIStream = async (
       }
 
       // Set the timeout to close the controller after a specified duration (e.g., 10 seconds)
-      const timeoutDuration = 8000; // 8 seconds (adjust as needed)
+      const timeoutDuration = 1000; // 1 seconds (adjust as needed)
       timeoutId = setTimeout(() => {
         // Only close the controller if it's not already closed
         if (!isControllerClosed) {
