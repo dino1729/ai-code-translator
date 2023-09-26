@@ -12,14 +12,14 @@ export default function Home() {
   const [outputLanguage, setOutputLanguage] = useState<string>('Python');
   const [inputCode, setInputCode] = useState<string>('');
   const [outputCode, setOutputCode] = useState<string>('');
-  const [model, setModel] = useState<OpenAIModel>('gpt-3p5-turbo-16k');
+  const [model, setModel] = useState<OpenAIModel>('gpt-4-32k');
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
   //const [apiKey, setApiKey] = useState<string>('');
 
   const handleTranslate = async () => {
     //const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 6000 : 12000;
-    const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 24000 : 6000;
+    const maxCodeLength = model === 'gpt-4-32k' ? 96000 : 24000;
 
     // if (!apiKey) {
     //   alert('Please enter an API key.');
