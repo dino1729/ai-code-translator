@@ -113,33 +113,6 @@ export const OpenAIStream = async (
     }),
   });
 
-  // const res = await fetch(url, {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "api-key": `${key ? key : process.env.OPENAI_API_KEY}`,
-  //   },
-  //   method: "POST",
-  //   body: JSON.stringify({
-  //     "model": model,
-  //     "messages": [
-  //       {
-  //         "role": "system",
-  //         "content": "You are an expert programmer fluent in all programming languages that follows user instructions"
-  //       },
-  //       {
-  //         "role": "user",
-  //         "content": prompt,
-  //       },
-  //     ],
-  //     "temperature": 0,
-  //     "stream": true,
-  //     "stop": null,
-  //   })
-  // });
-
-  // const responseBody = await res.text();
-  // console.log(responseBody);
-
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 

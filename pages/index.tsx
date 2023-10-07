@@ -12,19 +12,15 @@ export default function Home() {
   const [outputLanguage, setOutputLanguage] = useState<string>('Python');
   const [inputCode, setInputCode] = useState<string>('');
   const [outputCode, setOutputCode] = useState<string>('');
-  const [model, setModel] = useState<OpenAIModel>('gpt-4-32k');
+  const [model, setModel] = useState<OpenAIModel>('gpt-35-turbo-16k');
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
   //const [apiKey, setApiKey] = useState<string>('');
 
   const handleTranslate = async () => {
     //const maxCodeLength = model === 'gpt-3p5-turbo-16k' ? 6000 : 12000;
-    const maxCodeLength = model === 'gpt-4-32k' ? 96000 : 24000;
+    const maxCodeLength = model === 'gpt-35-turbo-16k' ? 24000 : 48000;
 
-    // if (!apiKey) {
-    //   alert('Please enter an API key.');
-    //   return;
-    // }
     const apiKey = process.env.OPENAI_API_KEY || '';
 
     if (inputLanguage === outputLanguage) {
@@ -65,12 +61,6 @@ export default function Home() {
       signal: controller.signal,
       body: JSON.stringify(body),
     });
-
-    // setTimeout(() => {
-    //   controller.abort();
-    //   setLoading(false);
-    //   setHasTranslated(true);
-    // }, 10000); // Abort after 10 seconds
     
     if (!response.ok) {
       setLoading(false);
@@ -115,25 +105,11 @@ export default function Home() {
     document.body.removeChild(el);
   };
 
-  // const handleApiKeyChange = (value: string) => {
-  //   setApiKey(value);
-
-  //   localStorage.setItem('apiKey', value);
-  // };
-
   useEffect(() => {
     if (hasTranslated) {
       handleTranslate();
     }
   }, [outputLanguage]);
-
-  // useEffect(() => {
-  //   const apiKey = localStorage.getItem('apiKey');
-
-  //   if (apiKey) {
-  //     setApiKey(apiKey);
-  //   }
-  // }, []);
 
   return (
     <>
@@ -150,10 +126,6 @@ export default function Home() {
         <div className="mt-10 flex flex-col items-center justify-center sm:mt-20">
           <div className="text-4xl font-bold">AI Code Translator</div>
         </div>
-
-        {/* <div className="mt-6 text-center text-sm">
-          <APIKeyInput apiKey={apiKey} onChange={handleApiKeyChange} />
-        </div> */}
 
         <div className="mt-2 flex items-center space-x-2">
           <ModelSelect
